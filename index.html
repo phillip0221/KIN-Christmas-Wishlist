@@ -147,21 +147,41 @@
     // =========================================================================
     // 1. DATA SOURCE (From your sheet)
     // =========================================================================
-    const allEntries = [
-      {
-        timestamp: "11/12/2026 13:01:45",
-        name: "Mic Test",
-        wish1_name: "Nintendo Switch 2",
-        wish1_link: "",
-        wish1_notes: "",
-        wish2_name: "Steam Deck OLED",
-        wish2_link: "https://ecommerce.datablitz.com.ph/products/steam-deck-oled-1tb?variant=44734944673951",
-        wish2_notes: "",
-        wish3_name: "Asus ROG Ally X",
-        wish3_link: "https://ecommerce.datablitz.com.ph/products/asus-rog-ally-x-amd-z1-extreme-24gb-ram-1tb-ssd-7-fhd-120hz-windows-11-gaming-handheld-black",
-        wish3_notes: ""
-      }
-    ];
+    // Google Sheets API connection
+    const API_URL = "https://script.google.com/macros/s/AKfycbxwiosQuGqossL9EX24YIW57kra4OgV3ZVmKpmJLX889MEiqVweDuaRgmnJpBl9YbO_/exec";
+    let allEntries = [];
+
+    function loadWishlist() {
+      const callbackName = "wishlistCallback_" + Date.now();
+      const script = document.createElement("script");
+
+      window[callbackName] = function(response) {
+        try {
+          if (!response || response.success !== true) {
+            throw new Error("The wishlist API returned an invalid response.");
+          }
+
+          allEntries = Array.isArray(response.entries) ? response.entries : [];
+          handleSearch();
+          console.log("Wishlist updated:", allEntries.length, "submission(s)");
+        } catch (error) {
+          console.error("Wishlist data error:", error);
+        } finally {
+          delete window[callbackName];
+          script.remove();
+        }
+      };
+
+      script.onerror = function() {
+        console.error("Could not load wishlist data from Google Sheets.");
+        delete window[callbackName];
+        script.remove();
+      };
+
+      script.src = API_URL + "?callback=" + callbackName + "&_=" + Date.now();
+      document.body.appendChild(script);
+    }
+
 
     // Image Keyword Matcher for gaming consoles and gifts
     function resolveItemImage(itemName) {
@@ -341,8 +361,11 @@
       snowContainer.appendChild(flake);
     }
 
-    // Initial render
-    renderCards(allEntries);
+    // Load live wishlist data from Google Sheets
+    loadWishlist();
+
+    // Refresh the wishlist every 60 seconds
+    setInterval(loadWishlist, 60000);
   </script>
 </body>
 </html>
