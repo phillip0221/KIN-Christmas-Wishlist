@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kin 2026 Christmas Party Wishlist</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Festive Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at top, #163826 0%, #0d2218 50%, #07130d 100%);
+      color: #f3f4f6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .festive-title {
+      font-family: 'Mountains of Christmas', cursive;
+    }
+
+    /* Falling Snow */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      z-index: 1;
+      color: #ffffff;
+      font-size: 1rem;
+      user-select: none;
+      pointer-events: none;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.85;
+      }
+      100% {
+        transform: translateY(105vh) rotate(360deg);
+        opacity: 0.15;
+      }
+    }
+
+    .gold-glow {
+      box-shadow: 0 0 30px -5px rgba(245, 158, 11, 0.25);
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8">
+
+  <!-- Snowfall Elements -->
+  <div id="snow-container"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto space-y-8">
+
+    <!-- HEADER -->
+    <header class="text-center space-y-4 pt-4">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-900/70 border border-emerald-500/40 text-emerald-300 text-xs md:text-sm font-semibold tracking-wider uppercase shadow-inner">
+        🎄 Kin 2026 Holiday Celebration 🎄
+      </div>
+
+      <h1 class="festive-title text-5xl md:text-7xl font-bold text-amber-300 drop-shadow-[0_4px_16px_rgba(245,158,11,0.45)]">
+        Christmas Party Wishlist
+      </h1>
+      <p class="text-emerald-100/80 max-w-xl mx-auto text-sm md:text-base">
+        Browse what everyone is hoping to get this Christmas! Don't forget to submit your own 3 wishes before the party on <b>December 12, 2026</b>.
+      </p>
+
+      <!-- SUBMIT WISHLIST BUTTON -->
+      <div class="pt-2">
+        <a 
+          href="https://docs.google.com/forms/d/e/1FAIpQLSf88zVsiz9AKFNkVohYETEQvqRuphlIrjq5UZ0C7GKgL7Fnkg/viewform"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-red-600 via-rose-600 to-red-700 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-2xl shadow-xl hover:shadow-red-500/30 transform hover:-translate-y-1 transition duration-200 border border-red-400/40 text-lg group"
+        >
+          <i data-lucide="gift" class="w-6 h-6 animate-bounce"></i>
+          <span>Submit your wishlist here</span>
+          <i data-lucide="external-link" class="w-5 h-5 opacity-80 group-hover:translate-x-1 transition"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- COUNTDOWN TIMER TO DEC 12, 2026 -->
+    <div class="bg-emerald-950/70 border border-emerald-500/30 backdrop-blur-md rounded-3xl p-6 gold-glow max-w-3xl mx-auto text-center">
+      <h2 class="text-xs md:text-sm uppercase tracking-widest text-amber-400 font-bold mb-4 flex items-center justify-center gap-2">
+        <i data-lucide="clock" class="w-4 h-4"></i> Countdown to December 12, 2026
+      </h2>
+
+      <div class="grid grid-cols-4 gap-3 md:gap-6 text-center">
+        <div class="bg-black/35 rounded-2xl p-3 md:p-4 border border-white/5">
+          <div id="days" class="text-2xl md:text-4xl font-extrabold text-white">00</div>
+          <div class="text-[10px] md:text-xs font-semibold text-emerald-300/70 uppercase mt-1">Days</div>
+        </div>
+        <div class="bg-black/35 rounded-2xl p-3 md:p-4 border border-white/5">
+          <div id="hours" class="text-2xl md:text-4xl font-extrabold text-white">00</div>
+          <div class="text-[10px] md:text-xs font-semibold text-emerald-300/70 uppercase mt-1">Hours</div>
+        </div>
+        <div class="bg-black/35 rounded-2xl p-3 md:p-4 border border-white/5">
+          <div id="minutes" class="text-2xl md:text-4xl font-extrabold text-white">00</div>
+          <div class="text-[10px] md:text-xs font-semibold text-emerald-300/70 uppercase mt-1">Mins</div>
+        </div>
+        <div class="bg-black/35 rounded-2xl p-3 md:p-4 border border-white/5">
+          <div id="seconds" class="text-2xl md:text-4xl font-extrabold text-amber-400">00</div>
+          <div class="text-[10px] md:text-xs font-semibold text-emerald-300/70 uppercase mt-1">Secs</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WISHLIST SECTION -->
+    <main class="space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-800/60 pb-3">
+        <h3 class="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
+          <span>🎁</span> Participant Wishlists
+        </h3>
+        
+        <div class="flex items-center gap-3">
+          <!-- Search Filter -->
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Search by name or gift..." 
+            oninput="handleSearch()"
+            class="bg-black/30 border border-emerald-500/30 rounded-xl px-3 py-1.5 text-xs text-emerald-100 placeholder-emerald-400/50 focus:outline-none focus:border-amber-400 transition"
+          />
+          <span id="total-count" class="text-xs bg-emerald-800/70 px-3 py-1.5 rounded-xl text-emerald-200 font-semibold border border-emerald-600/40 whitespace-nowrap">
+            1 Submission
+          </span>
+        </div>
+      </div>
+
+      <!-- Container where cards are dynamically rendered -->
+      <div id="wishlist-cards" class="space-y-6"></div>
+    </main>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. DATA SOURCE (From your sheet)
+    // =========================================================================
+    const allEntries = [
+      {
+        timestamp: "11/12/2026 13:01:45",
+        name: "Mic Test",
+        wish1_name: "Nintendo Switch 2",
+        wish1_link: "",
+        wish1_notes: "",
+        wish2_name: "Steam Deck OLED",
+        wish2_link: "https://ecommerce.datablitz.com.ph/products/steam-deck-oled-1tb?variant=44734944673951",
+        wish2_notes: "",
+        wish3_name: "Asus ROG Ally X",
+        wish3_link: "https://ecommerce.datablitz.com.ph/products/asus-rog-ally-x-amd-z1-extreme-24gb-ram-1tb-ssd-7-fhd-120hz-windows-11-gaming-handheld-black",
+        wish3_notes: ""
+      }
+    ];
+
+    // Image Keyword Matcher for gaming consoles and gifts
+    function resolveItemImage(itemName) {
+      const name = (itemName || "").toLowerCase();
+      if (name.includes("switch")) {
+        return "https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=700&q=80";
+      }
+      if (name.includes("steam deck")) {
+        return "https://images.unsplash.com/photo-1612287233207-64010839e944?auto=format&fit=crop&w=700&q=80";
+      }
+      if (name.includes("ally") || name.includes("rog")) {
+        return "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=700&q=80";
+      }
+      if (name.includes("playstation") || name.includes("ps5")) {
+        return "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=700&q=80";
+      }
+      if (name.includes("xbox")) {
+        return "https://images.unsplash.com/photo-1605901309584-818e25960a8f?auto=format&fit=crop&w=700&q=80";
+      }
+      if (name.includes("headphone") || name.includes("headset") || name.includes("audio")) {
+        return "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=80";
+      }
+      // Default festive present image
+      return "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=700&q=80";
+    }
+
+    // =========================================================================
+    // 2. RENDER ENGINE
+    // =========================================================================
+    function renderCards(data) {
+      const container = document.getElementById('wishlist-cards');
+      const countEl = document.getElementById('total-count');
+      container.innerHTML = "";
+      countEl.textContent = `${data.length} Submission${data.length === 1 ? '' : 's'}`;
+
+      if (data.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 bg-black/20 rounded-3xl border border-white/5">
+            <p class="text-emerald-300/70 text-base">No matching wishlists found.</p>
+          </div>
+        `;
+        return;
+      }
+
+      data.forEach(entry => {
+        const card = document.createElement('div');
+        card.className = "bg-emerald-950/40 border border-emerald-500/25 rounded-3xl p-6 backdrop-blur-md shadow-xl hover:border-amber-400/40 transition duration-300";
+
+        const wishes = [
+          { rank: "1st Wish", color: "bg-amber-500/20 text-amber-300 border-amber-500/40", name: entry.wish1_name, link: entry.wish1_link, notes: entry.wish1_notes },
+          { rank: "2nd Wish", color: "bg-blue-500/20 text-blue-300 border-blue-500/40", name: entry.wish2_name, link: entry.wish2_link, notes: entry.wish2_notes },
+          { rank: "3rd Wish", color: "bg-purple-500/20 text-purple-300 border-purple-500/40", name: entry.wish3_name, link: entry.wish3_link, notes: entry.wish3_notes }
+        ];
+
+        const wishesHTML = wishes.map(wish => {
+          if (!wish.name) return '';
+          const imgUrl = resolveItemImage(wish.name);
+
+          return `
+            <div class="flex flex-col bg-black/35 rounded-2xl overflow-hidden border border-white/10 hover:border-emerald-400/40 transition">
+              <div class="h-44 w-full bg-slate-900 overflow-hidden relative group">
+                <img 
+                  src="${imgUrl}" 
+                  alt="${wish.name}" 
+                  class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  loading="lazy"
+                />
+                <span class="absolute top-2.5 left-2.5 text-xs font-semibold px-2.5 py-1 rounded-full border backdrop-blur-md ${wish.color}">
+                  ${wish.rank}
+                </span>
+              </div>
+
+              <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+                <div>
+                  <h5 class="font-bold text-white text-base md:text-lg line-clamp-1" title="${wish.name}">
+                    ${wish.name}
+                  </h5>
+                  ${wish.notes ? `<p class="text-xs text-emerald-200/70 mt-1 line-clamp-2">${wish.notes}</p>` : ''}
+                </div>
+
+                ${wish.link ? `
+                  <a 
+                    href="${wish.link}" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    class="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold py-2 px-3 bg-emerald-800/50 hover:bg-emerald-700/70 text-emerald-200 hover:text-white rounded-xl transition border border-emerald-600/30"
+                  >
+                    <span>View Product</span>
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                  </a>
+                ` : `
+                  <div class="text-[11px] text-emerald-300/40 italic text-center py-2">No direct link provided</div>
+                `}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        card.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 mb-5 border-b border-white/10">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 to-red-600 flex items-center justify-center font-bold text-lg text-white shadow-md">
+                ${(entry.name || 'P').charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <h4 class="text-xl font-bold text-amber-200">${entry.name || 'Anonymous'}</h4>
+                <p class="text-xs text-emerald-300/60">${entry.timestamp ? 'Submitted: ' + entry.timestamp : ''}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            ${wishesHTML}
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    function handleSearch() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const filtered = allEntries.filter(e => {
+        const fullContent = `${e.name} ${e.wish1_name} ${e.wish2_name} ${e.wish3_name}`.toLowerCase();
+        return fullContent.includes(query);
+      });
+      renderCards(filtered);
+    }
+
+    // =========================================================================
+    // 3. COUNTDOWN TIMER (DEC 12, 2026)
+    // =========================================================================
+    const targetDate = new Date("2026-12-12T00:00:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        document.getElementById('days').innerText = "00";
+        document.getElementById('hours').innerText = "00";
+        document.getElementById('minutes').innerText = "00";
+        document.getElementById('seconds').innerText = "00";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById('days').innerText = String(days).padStart(2, '0');
+      document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+      document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+      document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // =========================================================================
+    // 4. SNOWFALL EFFECT
+    // =========================================================================
+    const snowContainer = document.getElementById('snow-container');
+    const snowflakeChars = ['❄', '❅', '❆', '•'];
+
+    for (let i = 0; i < 35; i++) {
+      const flake = document.createElement('div');
+      flake.className = 'snowflake';
+      flake.textContent = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
+      flake.style.left = Math.random() * 100 + 'vw';
+      flake.style.animationDuration = Math.random() * 5 + 6 + 's';
+      flake.style.opacity = Math.random() * 0.7 + 0.3;
+      flake.style.fontSize = Math.random() * 12 + 10 + 'px';
+      flake.style.animationDelay = Math.random() * 6 + 's';
+      snowContainer.appendChild(flake);
+    }
+
+    // Initial render
+    renderCards(allEntries);
+  </script>
+</body>
+</html>
