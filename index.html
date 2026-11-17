@@ -7,6 +7,8 @@
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- PapaParse for real-time Google Sheets fetching -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   
   <!-- Festive Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +19,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    /* Crucial mobile scrolling fix: apply smooth touch scrolling */
+    /* Mobile-smooth touch scrolling */
     html, body {
       min-height: 100%;
       -webkit-overflow-scrolling: touch;
@@ -33,7 +35,7 @@
       font-family: 'Mountains of Christmas', cursive;
     }
 
-    /* Snow container will never block mobile touch/swipes */
+    /* Snow container will not block finger taps / scrolling */
     #snow-container {
       position: fixed;
       inset: 0;
@@ -68,7 +70,7 @@
 </head>
 <body class="relative w-full overflow-x-clip px-3 py-6 sm:p-6 md:p-8">
 
-  <!-- Snowfall Elements (non-blocking) -->
+  <!-- Snowfall Elements -->
   <div id="snow-container" aria-hidden="true"></div>
 
   <!-- MAIN WRAPPER -->
@@ -131,19 +133,16 @@
 
     <!-- WISHLIST SECTION -->
     <main class="space-y-4 sm:space-y-6">
-      
-      <!-- Top Bar: Search & Submissions Counter -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-800/60 pb-3">
         <div class="flex items-center justify-between sm:justify-start gap-3">
           <h3 class="text-lg sm:text-2xl font-bold text-white flex items-center gap-2">
             <span>🎁</span> Participant Wishlists
           </h3>
           <span id="total-count" class="text-xs bg-emerald-800/70 px-2.5 py-1 rounded-xl text-emerald-200 font-semibold border border-emerald-600/40">
-            0 Submissions
+            Syncing live sheet...
           </span>
         </div>
         
-        <!-- Search Bar (Full-width on mobile) -->
         <div class="w-full sm:w-auto">
           <input 
             type="text" 
@@ -155,111 +154,33 @@
         </div>
       </div>
 
-      <!-- Container where cards are rendered -->
       <div id="wishlist-cards" class="space-y-6"></div>
     </main>
   </div>
 
   <script>
     // =========================================================================
-    // 1. DATA SOURCE (Loaded directly from your provided sheet)
+    // 1. LIVE GOOGLE SHEET INTEGRATION (Configured for your exact sheet)
     // =========================================================================
-    const allEntries = [
-      {
-        timestamp: "11/12/2026 19:14:17",
-        name: "Dan",
-        wish1_name: "Shoes size 39-40 (dominant white)",
-        wish1_link: "",
-        wish1_notes: "Basta feel nimong mabagay nako hahaha",
-        wish2_name: "UA shirt turtle neck Large (any color)",
-        wish2_link: "",
-        wish2_notes: "Kung walay large pwede rapud medium kay ni gamay man ko",
-        wish3_name: "Anything nga magamit daily / perfume",
-        wish3_link: "",
-        wish3_notes: "Basta mild ra syag humot dili isug"
-      },
-      {
-        timestamp: "11/12/2026 21:40:31",
-        name: "Sherry Lyn",
-        wish1_name: "Mole plus green tunnel cat toy",
-        wish1_link: "https://s.shopee.ph/3VlmnYZqvt",
-        wish1_notes: "Cat tunnel toy",
-        wish2_name: "Petsup Airtight Food Container",
-        wish2_link: "https://s.shopee.ph/6VPONQJsMi",
-        wish2_notes: "Please choose white. Cost 1379. Will pay you the rest",
-        wish3_name: "Haier Iron Steamer",
-        wish3_link: "https://s.shopee.ph/5fqHOAcJjd",
-        wish3_notes: "Please choose pink. Will pay you the rest."
-      },
-      {
-        timestamp: "11/14/2026 2:07:21",
-        name: "Dafny (anak ni kap)",
-        wish1_name: "Paddle board set",
-        wish1_link: "https://vt.tiktok.com/ZS9fqufvShBRK-ipiQY/",
-        wish1_notes: "Kani lang Ako pleaseeee plus ga sale Sila karun",
-        wish2_name: "Paddle board set (alternative)",
-        wish2_link: "https://vt.tiktok.com/ZS9fqufvShBRK-ipiQY/",
-        wish2_notes: "Kaniii raaa",
-        wish3_name: "Cash / Paddle board contribution",
-        wish3_link: "https://vt.tiktok.com/ZS9fqufvShBRK-ipiQY/",
-        wish3_notes: "Cash lang, 835 pero we can negotiate the price"
-      },
-      {
-        timestamp: "11/14/2026 16:19:50",
-        name: "Madddddiiiiiiieeeeeeee",
-        wish1_name: "Jabra Elite Earpods",
-        wish1_link: "https://ph.shp.ee/SR7UhZ4K",
-        wish1_notes: "Black Color",
-        wish2_name: "Meat Grinder Food Processor Electric",
-        wish2_link: "https://ph.shp.ee/rn6CQqYb",
-        wish2_notes: "3 Liters Stainless ha",
-        wish3_name: "Summer Wedge Heel",
-        wish3_link: "https://ph.shp.ee/9pCzXKXQ",
-        wish3_notes: "Green color"
-      },
-      {
-        timestamp: "11/15/2026 15:54:03",
-        name: "Uyab ni Sweet",
-        wish1_name: "Earpods",
-        wish1_link: "https://ph.shp.ee/SR7UhZ4K",
-        wish1_notes: "BLACK COLOR",
-        wish2_name: "Earpods Ra",
-        wish2_link: "",
-        wish2_notes: "Any good earpods",
-        wish3_name: "Earpod Nganiiiiiiiiii",
-        wish3_link: "",
-        wish3_notes: "Still earpods please"
-      },
-      {
-        timestamp: "11/16/2026 20:04:36",
-        name: "Willyn",
-        wish1_name: "Hotdog pillows",
-        wish1_link: "",
-        wish1_notes: "Mapalit ra nis mandaue foam",
-        wish2_name: "Curtains",
-        wish2_link: "",
-        wish2_notes: "Curtains for room/house",
-        wish3_name: "Ref organizer",
-        wish3_link: "",
-        wish3_notes: "Naa ras lee plaza"
-      },
-      {
-        timestamp: "11/12/2026 13:01:45",
-        name: "Mic Test",
-        wish1_name: "Nintendo Switch 2",
-        wish1_link: "",
-        wish1_notes: "Next gen handheld console",
-        wish2_name: "Steam Deck OLED",
-        wish2_link: "https://ecommerce.datablitz.com.ph/products/steam-deck-oled-1tb?variant=44734944673951",
-        wish2_notes: "1TB OLED edition",
-        wish3_name: "Asus ROG Ally X",
-        wish3_link: "https://ecommerce.datablitz.com.ph/products/asus-rog-ally-x-amd-z1-extreme-24gb-ram-1tb-ssd-7-fhd-120hz-windows-11-gaming-handheld-black",
-        wish3_notes: "Black handheld"
+    const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/18Xrx7AcR8PXDLDxJBcwjNeQ9qNjGw67Qfzb7NJzgyV4/gviz/tq?tqx=out:csv&gid=1552633131";
+
+    let currentEntries = [];
+
+    // Helper to extract column headers flexibly (handles extra spaces, etc.)
+    function getVal(row, ...keys) {
+      for (const k of keys) {
+        if (row[k] !== undefined) return String(row[k]).trim();
+        for (const rowKey in row) {
+          if (rowKey.trim().toLowerCase() === k.trim().toLowerCase()) {
+            return String(row[rowKey]).trim();
+          }
+        }
       }
-    ];
+      return "";
+    }
 
     // =========================================================================
-    // 2. AI IMAGE GENERATION (Generates tailored 3D festive images on-the-fly)
+    // 2. AI GENERATIVE IMAGE ENGINE (Free via Pollinations.ai)
     // =========================================================================
     function getHashSeed(str) {
       let hash = 0;
@@ -282,7 +203,7 @@
     }
 
     // =========================================================================
-    // 3. RENDER CARDS (Mobile-First Layout)
+    // 3. RENDER FUNCTION
     // =========================================================================
     function renderCards(data) {
       const container = document.getElementById('wishlist-cards');
@@ -315,11 +236,10 @@
 
           return `
             <div class="flex flex-col bg-black/40 rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 hover:border-emerald-400/40 transition">
-              <!-- Image with Skeleton Loader -->
               <div class="h-44 sm:h-40 md:h-44 w-full bg-slate-900/80 overflow-hidden relative group">
                 <div class="absolute inset-0 flex flex-col items-center justify-center text-emerald-400/50 text-[11px] animate-pulse">
                   <i data-lucide="sparkles" class="w-5 h-5 mb-1 text-amber-400"></i>
-                  <span>Generating preview...</span>
+                  <span>Painting gift preview...</span>
                 </div>
 
                 <img 
@@ -340,7 +260,6 @@
                 </span>
               </div>
 
-              <!-- Content details -->
               <div class="p-3.5 sm:p-4 flex-1 flex flex-col justify-between space-y-3">
                 <div>
                   <h5 class="font-bold text-white text-sm sm:text-base line-clamp-2" title="${wish.name}">
@@ -389,9 +308,57 @@
       lucide.createIcons();
     }
 
+    // =========================================================================
+    // 4. AUTOMATIC SHEET DATA FETCHER
+    // =========================================================================
+    function loadWishlistData() {
+      Papa.parse(GOOGLE_SHEET_CSV_URL, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          if (results.data && results.data.length > 0) {
+            currentEntries = results.data
+              .map(row => ({
+                timestamp: getVal(row, "Timestamp"),
+                name: getVal(row, "Name"),
+                wish1_name: getVal(row, "Wish #1", "Wish 1"),
+                wish1_link: getVal(row, "Wish #1 - Link", "Wish 1 - Link"),
+                wish1_notes: getVal(row, "Wish #1 - Notes", "Wish 1 - Notes"),
+                wish2_name: getVal(row, "Wish #2", "Wish 2"),
+                wish2_link: getVal(row, "Wish #2 - Link", "Wish 2 - Link"),
+                wish2_notes: getVal(row, "Wish #2 - Notes", "Wish 2 - Notes"),
+                wish3_name: getVal(row, "Wish #3", "Wish 3"),
+                wish3_link: getVal(row, "Wish #3 - Link", "Wish 3 - Link"),
+                wish3_notes: getVal(row, "Wish #3 - Notes", "Wish 3 - Notes"),
+              }))
+              .filter(entry => entry.name || entry.wish1_name) // Exclude blank lines
+              .reverse(); // Latest submissions show up first!
+
+            renderCards(currentEntries);
+          } else {
+            document.getElementById('wishlist-cards').innerHTML = `
+              <div class="text-center py-12 bg-black/30 rounded-2xl border border-white/5">
+                <p class="text-emerald-300/70 text-sm">No entries found yet.</p>
+              </div>
+            `;
+          }
+        },
+        error: function(err) {
+          console.error("Sheet load error:", err);
+          document.getElementById('wishlist-cards').innerHTML = `
+            <div class="text-center py-12 bg-red-950/40 rounded-2xl border border-red-500/30 p-6">
+              <p class="text-red-300 font-bold mb-2">Could not access the Google Sheet</p>
+              <p class="text-xs text-red-200/70 max-w-md mx-auto">Please ensure the Google Sheet is shared as <b>"Anyone with the link can view"</b>.</p>
+            </div>
+          `;
+        }
+      });
+    }
+
     function handleSearch() {
       const query = document.getElementById('search-input').value.toLowerCase();
-      const filtered = allEntries.filter(e => {
+      const filtered = currentEntries.filter(e => {
         const fullContent = `${e.name} ${e.wish1_name} ${e.wish1_notes} ${e.wish2_name} ${e.wish2_notes} ${e.wish3_name} ${e.wish3_notes}`.toLowerCase();
         return fullContent.includes(query);
       });
@@ -399,7 +366,7 @@
     }
 
     // =========================================================================
-    // 4. COUNTDOWN TIMER (DEC 12, 2026)
+    // 5. COUNTDOWN TIMER (DEC 12, 2026)
     // =========================================================================
     const targetDate = new Date("2026-12-12T00:00:00").getTime();
 
@@ -429,11 +396,11 @@
     updateCountdown();
 
     // =========================================================================
-    // 5. MOBILE-SAFE SNOW GENERATOR
+    // 6. MOBILE-SAFE SNOW GENERATOR
     // =========================================================================
     const snowContainer = document.getElementById('snow-container');
     const snowflakeChars = ['❄', '❅', '❆', '•'];
-    const count = window.innerWidth < 640 ? 18 : 35; // Fewer snowflakes on mobile for smooth performance
+    const count = window.innerWidth < 640 ? 18 : 35;
 
     for (let i = 0; i < count; i++) {
       const flake = document.createElement('div');
@@ -447,8 +414,8 @@
       snowContainer.appendChild(flake);
     }
 
-    // Initial render
-    renderCards(allEntries);
+    // Auto-fetch data on load
+    loadWishlistData();
   </script>
 </body>
 </html>
